@@ -3,13 +3,18 @@ body {
   background-color: #282c34;
 }
 
-#id {
+#root {
   min-height: 100vh;
   background-color: #282c34;
 }
 
 .navbar {
   background-color: #282c34;  
+}
+
+.container {
+  background-color: #282c34;  
+
 }
 
 .App {

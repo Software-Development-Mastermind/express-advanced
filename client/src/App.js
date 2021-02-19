@@ -18,6 +18,7 @@ import {
 import SplashContainer from './SplashContainer';
 import HomeContainer from './HomeContainer';
 import RegisterContainer from './RegisterContainer';
+import Navbar from './Navbar';
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(JSON.parse(localStorage.getItem('todo-app-user')));
@@ -32,19 +33,9 @@ function App() {
     setLoggedInUser(null);
   }
 
-  const navbar = loggedInUser 
-    ? (
-      <nav className="navbar float-right">
-        <p className="navbar-brand">
-          Logged in as {loggedInUser.email} <button className="btn btn-sm btn-primary ml-2 mb-1" onClick={logoutUser}>Logout</button>
-        </p>
-      </nav>
-    )
-    : <nav></nav>;
-
   return (
     <>
-      {navbar}      
+      <Navbar loggedInUser={loggedInUser} logoutUser={logoutUser}/>     
       <BrowserRouter>
         <Switch>
           <Route path="/home" render={() => {

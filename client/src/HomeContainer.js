@@ -9,7 +9,7 @@ import axios from 'axios';
 
 function HomeContainer(props) {
   const { loggedInUser } = props;
-  
+
   const [todos, setTodos] = useState([]);
   const [inputText, setInputText] = useState('');
 
@@ -40,7 +40,7 @@ function HomeContainer(props) {
 
     const body = {
       text: inputText,
-      userId: localStorage.getItem(localStorageUserKey)
+      userId: loggedInUser.id
     }
 
     axios.post('api/todos', body).then(response => {
@@ -50,11 +50,20 @@ function HomeContainer(props) {
   };
 
   return (
-    <div className="App">
       <div className="container container-fluid">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-        </header>
+        <div className="row pt-5">
+          <div className="col-lg-12 justify-content-center text-center">
+          </div>
+        </div>
+        <div className="row pt-5">
+          <div className="col-lg-12 justify-content-center text-center">
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-12 justify-content-center mt-5 text-center">
+              <img src={logo} className="App-logo" alt="logo" />
+          </div>
+        </div>
 
         <div className="row">
           <form className="col-lg-4 offset-lg-4" onSubmit={onSubmit}>
@@ -69,13 +78,14 @@ function HomeContainer(props) {
             </div>
           </form>
         </div>
-        <div className="col-lg-4 offset-lg-4">
-          <ul className="list-group">
-            {todoListItems}
-          </ul>
+        <div className="row">
+          <div className="col-lg-4 offset-lg-4">
+            <ul className="list-group">
+              {todoListItems}
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
   );
 }
 
