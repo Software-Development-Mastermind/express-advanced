@@ -7,7 +7,6 @@ const bodyParser = require("body-parser");
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  // TBD
   host: 'localhost',
   database: 'full_stack_todos',
   user: 'postgres',
@@ -22,8 +21,23 @@ app.use(bodyParser.json());
 //Serving React Build via Express.js
 app.use('/', express.static(path.join(__dirname, "client", "build")));
 
-app.post('/api/auth/login', (request, response) => {
-  response.send({}); 
+app.post('/api/auth/login', async (request, response) => {
+  const { body } = request;
+
+  const dbResponse = await pool.query(`
+    SELECT * FROM users WHERE email = $1;
+  `, [ body.email ]);
+
+  if (dbResponse.rows === 0) { 
+    return res.status(403).send({ errorMessage: "User/password issue"}); 
+  }
+
+  const isMatchingPassword = dbResponse.rows[0].password === body.password;
+  if (!isMatchingPassword) {
+    return res.status(403).send({ errorMessage: "User/password issue"});
+  }
+
+  response.send({ userId: dbResponse.rows[0].id }); 
 });
 
 app.post('/api/auth/register', async (request, response) => {
