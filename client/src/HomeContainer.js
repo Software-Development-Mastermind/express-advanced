@@ -2,16 +2,14 @@ import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
-
 import axios from 'axios';
+import TodoItem from './TodoItem';
 
 function HomeContainer(props) {
-  const { loggedInUser } = props;
-
   const [todos, setTodos] = useState([]);
   const [inputText, setInputText] = useState('');
+  
+  const { loggedInUser } = props;
 
   useEffect(() => {
     axios.get(`api/todos?user_id=${loggedInUser.id}`).then(response => setTodos(response.data));
@@ -25,14 +23,6 @@ function HomeContainer(props) {
     axios.delete(`api/todos/${todoId}`).then(response => {
       getTodos().then(response => setTodos(response.data));
     });
-  }
-
-  let todoListItems = todos.map(todo => {
-    return <li key={todo.id} className="list-group-item">{todo.text} <FontAwesomeIcon className="float-right fa-button" icon={faTrash} onClick={(e) => deleteTodo(todo.id)} /></li>
-  });
-
-  if (todos.length === 0) {
-    todoListItems = <li className="list-group-item">No todo items have been added yet!</li>
   }
 
   const onSubmit = (e) => {
@@ -81,7 +71,11 @@ function HomeContainer(props) {
         <div className="row">
           <div className="col-lg-4 offset-lg-4">
             <ul className="list-group">
-              {todoListItems}
+              {
+              todos.length > 0
+                ? todos.map(todo => <TodoItem todo={todo}  deleteTodo={deleteTodo}/>)
+                : <li className="list-group-item">No todo items have been added yet!</li>
+              }
             </ul>
           </div>
         </div>
