@@ -39,7 +39,8 @@ app.post('/api/auth/login', async (request, response) => {
     return res.status(403).send({ errorMessage: "User/password issue"});
   }
 
-  response.send({ userId: dbResponse.rows[0].id }); 
+  const user = dbResponse.rows[0];
+  response.send({ id: user.id, email: user.email }); 
 });
 
 // REGISTER A NEW USER

@@ -8,6 +8,10 @@ body {
   background-color: #282c34;
 }
 
+.navbar {
+  background-color: #282c34;  
+}
+
 .App {
   min-height: 100vh;
   text-align: center;

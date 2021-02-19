@@ -10,7 +10,7 @@ function SplashContainer(props) {
   const [passwordEmailText, setPasswordEmailText] = useState('');
 
   const history = useHistory();
-  const location = useLocation();
+  const location = useLocation();  
 
   const loginOnSubmit = (e) => {
     e.preventDefault();
@@ -20,9 +20,8 @@ function SplashContainer(props) {
       password: passwordEmailText
     }
 
-    // login
     axios.post('api/auth/login', body).then(response => {
-      localStorage.setItem('todo-app-user-id', response.data.userId);
+      props.setLoggedInUser(response.data);
       history.push('home');
     });
   }

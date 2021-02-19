@@ -3,8 +3,7 @@ import logo from './logo.svg';
 
 import axios from 'axios';
 import { Link, useHistory } from 'react-router-dom';
-
-function RegisterContainer() {
+function RegisterContainer() {  
   const [registerEmailText, setRegisterEmailText] = useState('');
   const [registerPasswordText, setregisterPasswordText] = useState('');
 

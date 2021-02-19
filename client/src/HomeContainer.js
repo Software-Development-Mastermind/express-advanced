@@ -6,25 +6,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
 
-const localStorageUserKey = 'todo-app-user-id';
-
-function HomeContainer() {
-  const history = useHistory();
-  if (!localStorage.getItem(localStorageUserKey)) {
-    history.push('/');
-  }
-
+function HomeContainer(props) {
+  const { loggedInUser } = props;
+  
   const [todos, setTodos] = useState([]);
   const [inputText, setInputText] = useState('');
 
   useEffect(() => {
-    axios.get(`api/todos?user_id=${localStorage.getItem(localStorageUserKey)}`).then(response => setTodos(response.data));
+    axios.get(`api/todos?user_id=${loggedInUser.id}`).then(response => setTodos(response.data));
   }, []);
 
   const getTodos = () => {
-    return axios.get(`api/todos?user_id=${localStorage.getItem(localStorageUserKey)}`);
+    return axios.get(`api/todos?user_id=${loggedInUser.id}`);
   }
 
   const deleteTodo = (todoId) => {
