@@ -24,13 +24,14 @@ app.use('/', express.static(path.join(__dirname, "client", "build")));
 // LOGIN A USER
 app.post('/api/auth/login', async (request, response) => {
   const { body } = request;
+  console.log(body);
 
   const dbResponse = await pool.query(`
     SELECT * FROM users WHERE email = $1;
   `, [ body.email ]);
 
-  if (dbResponse.rows === 0) { 
-    return res.status(403).send({ errorMessage: "User/password issue"}); 
+  if (dbResponse.rows.length === 0) { 
+    return response.status(403).send({ errorMessage: "User/password issue"}); 
   }
 
   const isMatchingPassword = dbResponse.rows[0].password === body.password;
@@ -45,17 +46,17 @@ app.post('/api/auth/login', async (request, response) => {
 app.post('/api/auth/register', async (request, response) => {
   const { body } = request;
 
-  const dbResponse = await pool.query(`
+  await pool.query(`
     INSERT INTO users 
-      (id, email, password) VALUES ($1, $2, $3) RETURNING id;
-  `, [ body.id, body.email, body.password ]);
+      (email, password) VALUES ($1, $2);
+  `, [ body.email, body.password ]);
 
-  response.send(dbResponse.rows[0]);
+  response.status(201).send();
 });
 
 // GET TODOS
 app.get('/api/todos', async (request, response) => {
-  const dbResponse = await pool.query('SELECT * FROM todos');
+  const dbResponse = await pool.query('SELECT * FROM todos WHERE user_id = $1', [ request.query.user_id ]);
 
   response.send(dbResponse.rows); 
 });
