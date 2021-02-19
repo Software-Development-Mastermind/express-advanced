@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "nodemon server.js",
-    "dev": "concurrently \"npm run watch\" \"npm run watch --prefix client\""
+    "dev": "concurrently \"npm run watch\" \"npm run watch --prefix client\"",
+    "init-setup": "npm i && npm i --prefix client && psql -f create-db.sql && psql -d full_stack_todos -f db.sql"
   },
   "keywords": [
     "advanced",
