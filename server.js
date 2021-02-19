@@ -21,6 +21,7 @@ app.use(bodyParser.json());
 //Serving React Build via Express.js
 app.use('/', express.static(path.join(__dirname, "client", "build")));
 
+// LOGIN A USER
 app.post('/api/auth/login', async (request, response) => {
   const { body } = request;
 
@@ -40,6 +41,7 @@ app.post('/api/auth/login', async (request, response) => {
   response.send({ userId: dbResponse.rows[0].id }); 
 });
 
+// REGISTER A NEW USER
 app.post('/api/auth/register', async (request, response) => {
   const { body } = request;
 
@@ -51,22 +53,25 @@ app.post('/api/auth/register', async (request, response) => {
   response.send(dbResponse.rows[0]);
 });
 
+// GET TODOS
 app.get('/api/todos', async (request, response) => {
   const dbResponse = await pool.query('SELECT * FROM todos');
 
   response.send(dbResponse.rows); 
 });
 
+// CREATE NEW TODOS
 app.post('/api/todos', (request, response) => {
   const { body } = request;
 
   pool.query(`
     INSERT INTO todos 
-      (id, text, user_id) VALUES ($1, $2, $3);
-  `, [ body.id, body.text, body.userId ])
+      (text, user_id) VALUES ($1, $2);
+  `, [ body.text, body.userId ])
   response.status(201).send(); 
 });
 
+// DELETE TODOS
 app.delete('/api/todos/:id', (request, response) => {
   pool.query(`
     DELETE FROM todos WHERE id = $1
