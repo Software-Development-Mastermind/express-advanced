@@ -4,6 +4,8 @@ const app = express();
 const path = require('path');
 const bodyParser = require("body-parser");
 
+const port = 3000;
+
 const { Pool } = require('pg');
 
 const pool = new Pool({
@@ -13,18 +15,14 @@ const pool = new Pool({
   password: 'password'
 });
 
-const port = 3000;
-
 //Middleware
 app.use(bodyParser.json());
-
 //Serving React Build via Express.js
 app.use('/', express.static(path.join(__dirname, "client", "build")));
 
 // LOGIN A USER
 app.post('/api/auth/login', async (request, response) => {
   const { body } = request;
-  console.log(body);
 
   const dbResponse = await pool.query(`
     SELECT * FROM users WHERE email = $1;
