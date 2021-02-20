@@ -8,6 +8,7 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 function SplashContainer(props) {
   const [loginEmailText, setLoginEmailText] = useState('');
   const [passwordEmailText, setPasswordEmailText] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const history = useHistory();
   const location = useLocation();  
@@ -21,14 +22,23 @@ function SplashContainer(props) {
     }
 
     axios.post('api/auth/login', body).then(response => {
+      console.log(response);
       props.setLoggedInUser(response.data);
       history.push('home');
+    })
+    .catch(err => {
+      console.log('err', err.response);
+      setErrorMessage(err.response.data.errorMessage);
     });
   }
 
   const successfulRegisterText = location.search && queryString.parse(location.search).register_successful === 'true'
     ? <div className="alert alert-success">You've successfully created an account! Login below to get started!</div>
     : null;
+
+  const errorMessageText = errorMessage 
+  ? <div className="alert alert-danger">{errorMessage}</div>
+  : null;
 
   return (
     <div className="App">
@@ -41,6 +51,7 @@ function SplashContainer(props) {
         <div className="row">
           <form className="col-lg-4 offset-lg-4" onSubmit={loginOnSubmit}>
             {successfulRegisterText}
+            {errorMessageText}
             <div className="input-group mb-3">
               <input 
                 className="form-control" 
